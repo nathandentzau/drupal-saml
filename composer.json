@@ -1,0 +1,17 @@
+{
+    "name": "drupal/saml",
+    "description": "SAML 2.0 API for Drupal 8.",
+    "type": "drupal-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nathan Dentzau",
+            "email": "nathan.dentzau@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "drupal/externalauth": "^1.1",
+        "lightsaml/lightsaml": "^1.4"
+    }
+}

@@ -1,0 +1,11 @@
+saml.sp.consume:
+  path: /saml/sp/{identityProvider}/consume
+  defaults:
+    _controller: Drupal\saml\Controller\ServiceProviderController::consume
+  methods: [ POST ]
+  requirements:
+    _access: 'TRUE'
+  options:
+    parameters:
+      identityProvider:
+        type: 'entity:identity_provider'

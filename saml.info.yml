@@ -1,0 +1,8 @@
+name: SAML 2.0
+description: SAML 2.0 API for Drupal 8.
+type: module
+core: 8.x
+package: Web services
+
+dependencies:
+  - externalauth
