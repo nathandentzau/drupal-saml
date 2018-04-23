@@ -14,9 +14,9 @@ use LightSaml\Model\Protocol\Response as SamlResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Drupal\saml\Model\Metadata\EntityDescriptorFactoryInterface;
 use Drupal\saml\Factory\Model\Protocol\SamlMessageFactoryInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Drupal\saml\Factory\Model\Metadata\EntityDescriptorFactoryInterface;
 
 /**
  * Provides a controller for service provider routes.
