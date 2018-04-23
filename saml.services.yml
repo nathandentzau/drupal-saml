@@ -1,56 +1,10 @@
 services:
-  saml.event_listener.decrypt_assertions:
-    class: Drupal\saml\EventListener\DecryptAssertionsListener
-    tags:
-      - { name: event_subscriber }
-
-  saml.message_factory:
-    class: Drupal\saml\SamlMessageFactory
+  saml.entity_descriptor_factory:
+    class: Drupal\saml\Factory\Model\Metadata\EntityDescriptorFactory
     arguments:
       - '@event_dispatcher'
 
-  saml.validator.binding_type:
-    class: Drupal\saml\Validation\Response\BindingTypeValidator
-    tags:
-      - { name: event_subscriber }
-
-  saml.validator.issuer:
-    class: Drupal\saml\Validation\Response\IssuerValidator
-    tags:
-      - { name: event_subscriber }
-
-  saml.validator.status:
-    class: Drupal\saml\Validation\Response\StatusValidator
-    tags:
-      - { name: event_subscriber }
-
-  saml.validator.destination:
-    class: Drupal\saml\Validation\Response\DestinationValidator
+  saml.message_factory:
+    class: Drupal\saml\Factory\Model\Protocol\SamlMessageFactory
     arguments:
-      - '@request_stack'
-    tags:
-      - { name: event_subscriber }
-
-  saml.validator.signature:
-    class: Drupal\saml\Validation\Response\SignatureValidator
-    tags:
-      - { name: event_subscriber }
-
-  saml.validator.assertion:
-    class: Drupal\saml\Validation\Response\AssertionValidator
-    tags:
-      - { name: event_subscriber }
-
-  saml.validator.authn_statement:
-    class: Drupal\saml\Validation\Response\AuthnStatementValidator
-    arguments:
-      - '@request_stack'
-    tags:
-      - { name: event_subscriber }
-
-  saml.validator.time:
-    class: Drupal\saml\Validation\Response\TimeValidator
-    arguments:
-      - '@datetime.time'
-    tags:
-      - { name: event_subscriber }
+      - '@event_dispatcher'

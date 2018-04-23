@@ -1,19 +1,20 @@
 <?php
 
-namespace Drupal\saml;
+namespace Drupal\saml\Factory\Model\Protocol;
 
 use LightSaml\Binding\BindingFactory;
+use LightSaml\Model\Protocol\Response;
 use LightSaml\Context\Profile\MessageContext;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\saml\Event\ReceiveSamlMessageEvent;
 use Drupal\saml\Entity\IdentityProviderInterface;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Drupal\saml\Validator\Model\Protocol\ResponseValidator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Provides a saml message factory.
  */
-class SamlMessageFactory {
+class SamlMessageFactory implements SamlMessageFactoryInterface {
 
   /**
    * SAML binding factory.
@@ -46,15 +47,7 @@ class SamlMessageFactory {
   }
 
   /**
-   * Create a SAML message from the HTTP request.
-   *
-   * @param Drupal\saml\Entity\IdentityProviderInterface $identityProvider
-   *   The Identity Provider entity.
-   * @param Symfony\Component\HttpFoundation\Request $request
-   *   The symfony http request.
-   *
-   * @return LightSaml\Model\Protocol\SamlMessage|null
-   *   The SAML message.
+   * {@inheritdoc}
    */
   public function createFromRequest(
     IdentityProviderInterface $identityProvider,
@@ -68,12 +61,27 @@ class SamlMessageFactory {
     $binding = $this->bindingFactory->getBindingByRequest($request);
     $binding->receive($request, $context);
 
+    $message = $context->getMessage();
+
+    if ($message instanceof Response) {
+      if (!empty($message->getAllEncryptedAssertions())) {
+        Helper::decryptAssertions(
+          $message,
+          $identityProvider->getEncryptionCertificate(),
+          $identityProvider->getEncryptionKey(),
+          $identityProvider->getEncryptionAlgorithm()
+        );
+      }
+
+      (new ResponseValidator($identityProvider, $request))->validate($context);
+    }
+
     $this->eventDispatcher->dispatch(
       ReceiveSamlMessageEvent::NAME,
       new ReceiveSamlMessageEvent($context, $identityProvider)
     );
 
-    return $context->getMessage();
+    return $message;
   }
 
 }

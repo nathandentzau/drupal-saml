@@ -49,6 +49,16 @@ interface IdentityProviderInterface extends ConfigEntityInterface {
   public function wantsSignedResponse();
 
   /**
+   * Get the signature algorithm.
+   *
+   * @return string
+   *   The encryption algorithm.
+   *
+   * @see RobRichards\XMLSecLibs\XMLSecurityKey
+   */
+  public function getSignatureAlgorithm();
+
+  /**
    * Get the signature certificate.
    *
    * @return string
@@ -75,11 +85,55 @@ interface IdentityProviderInterface extends ConfigEntityInterface {
   public function getIssuerFormat();
 
   /**
+   * Get the Name ID format.
+   *
+   * @return string
+   *   The Name ID.
+   *
+   * @see LightSaml\SamlConstants
+   */
+  public function getNameIdFormat();
+
+  /**
    * Get the mail attribute name.
    *
    * @return string
    *   The name of the mail attribute.
    */
   public function getMailAttribute();
+
+  /**
+   * Get the AuthnContext.
+   *
+   * @return string
+   *   The AuthnContext.
+   *
+   * @see LightSaml\SamlConstants
+   */
+  public function getAuthnContext();
+
+  /**
+   * Get the SAML Entity ID.
+   *
+   * @return string
+   *   The full URI of an Entity ID.
+   */
+  public function getEntityId();
+
+  /**
+   * Get the assertion consumer service URL.
+   *
+   * @return string
+   *   The absolute URL to the assertion consumer service route.
+   */
+  public function getAssertionConsumerServiceUrl();
+
+  /**
+   * Get the metadata URL.
+   *
+   * @return string
+   *   The metadata URL.
+   */
+  public function getMetadataUrl();
 
 }

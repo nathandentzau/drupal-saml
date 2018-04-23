@@ -1,8 +1,25 @@
+saml.sp:
+  path: /saml/sp/{identityProvider}
+  requirements:
+    _access: 'FALSE'
+
 saml.sp.consume:
   path: /saml/sp/{identityProvider}/consume
   defaults:
     _controller: Drupal\saml\Controller\ServiceProviderController::consume
   methods: [ POST ]
+  requirements:
+    _access: 'TRUE'
+  options:
+    parameters:
+      identityProvider:
+        type: 'entity:identity_provider'
+
+saml.sp.metadata:
+  path: /saml/sp/{identityProvider}/metadata.xml
+  defaults:
+    _controller: Drupal\saml\Controller\ServiceProviderController::metadata
+  methods: [ GET ]
   requirements:
     _access: 'TRUE'
   options:

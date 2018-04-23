@@ -21,8 +21,11 @@ saml.identity_provider.*:
       type: string
       label: Encryption key
     signed_response:
-      type: string
+      type: boolean
       label: Wants signed response
+    signature_algorithm:
+      type: string
+      label: Signature algorithm
     signature_certificate:
       type: string
       label: Signature certificate
@@ -32,6 +35,12 @@ saml.identity_provider.*:
     issuer_format:
       type: string
       label: Issuer format
+    name_id_format:
+      type: string
+      label: Name ID format
+    authn_context:
+      type: string
+      label: AuthnContext
     mail_attribute:
       type: string
       label: Mail attribute
