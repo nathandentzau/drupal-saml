@@ -32,6 +32,11 @@ class OutboundConnectionController extends ControllerBase {
    */
   protected $messageFactory;
 
+  /**
+   * The page cache kill switch
+   *
+   * @var Drupal\Core\PageCache\ResponsePolicy\KillSwitch
+   */
   protected $killSwitch;
 
   /**
@@ -41,6 +46,8 @@ class OutboundConnectionController extends ControllerBase {
    *   Current user account.
    * @param Drupal\saml\Factory\Model\Protocol\SamlMessageFactoryInterface $messageFactory
    *   Saml message factory.
+   * @param Drupal\Core\PageCache\ResponsePolicy\KillSwitch $killSwitch
+   *   Page cache kill switch.
    */
   public function __construct(
     AccountInterface $account,

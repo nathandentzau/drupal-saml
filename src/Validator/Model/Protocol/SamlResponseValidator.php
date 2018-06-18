@@ -19,18 +19,60 @@ use Drupal\saml\Validator\Model\Assertion\CompositeIssuerValidator;
 use LightSaml\Validator\Model\Assertion\AssertionValidatorInterface;
 use Drupal\saml\Validator\Model\Assertion\SignatureValidatorInterface;
 
+/**
+ * Provides a SAML Response validator.
+ */
 class SamlResponseValidator implements SamlMessageValidatorInterface {
 
+  /**
+   * The Identity Provider.
+   *
+   * @var Drupal\saml\Entity\IdentityProviderInterface
+   */
   protected $identityProvider;
 
+  /**
+   * The current request.
+   *
+   * @var Symfony\Component\HttpFoundation\Request
+   */
   protected $request;
 
+  /**
+   * Assertion validator.
+   *
+   * @var Drupal\saml\Validator\Model\Assertion\AssertionValidator
+   */
   protected $assertionValidator;
 
+  /**
+   * Issuer validator.
+   *
+   * @var Drupal\saml\Validator\Model\Assertion\CompositeIssuerValidator
+   */
   protected $issuerValidator;
 
+  /**
+   * Signature validator.
+   *
+   * @var Drupal\saml\Validator\Model\Assertion\SignatureValidator
+   */
   protected $signatureValidator;
 
+  /**
+   * Constructor for SamlResponseValidator.
+   *
+   * @param Drupal\saml\Entity\IdentityProviderInterface $identityProvider
+   *   The Identity Provider.
+   * @param Symfony\Component\HttpFoundation\Request $request
+   *   The current request.
+   * @param Drupal\saml\Validator\Model\Assertion\AssertionValidator $assertionValidator
+   *   Assertion validator.
+   * @param Drupal\saml\Validator\Model\Assertion\CompositeIssuerValidator $issuerValidator
+   *   Issuer validator.
+   * @param Drupal\saml\Validator\Model\Assertion\SignatureValidator $signatureValidator
+   *   Signature validator.
+   */
   public function __construct(
     IdentityProviderInterface $identityProvider,
     Request $request,
@@ -48,7 +90,10 @@ class SamlResponseValidator implements SamlMessageValidatorInterface {
       ?: new SignatureValidator($identityProvider);
   }
 
-  public function validate(MessageContext $context): void {
+  /**
+   * {@inheritdoc}
+   */
+  public function validate(MessageContext $context) {
     $bindingType = $context->getBindingType();
     $message = $context->getMessage();
     $assertions = $message->getAllAssertions();
@@ -63,7 +108,15 @@ class SamlResponseValidator implements SamlMessageValidatorInterface {
     $this->validateAssertions($assertions);
   }
 
-  public function validateAssertions(array $assertions): void {
+  /**
+   * Validate assertions.
+   *
+   * @param Assertion[] $assertions
+   *   A list of assertions to be validated.
+   *
+   * @throws Drupal\saml\Exception\SamlValidationException
+   */
+  public function validateAssertions(array $assertions) {
     if (empty($assertions)) {
         throw new SamlValidationException(
             'Message must contain at least one (1) Assertion'
@@ -125,6 +178,14 @@ class SamlResponseValidator implements SamlMessageValidatorInterface {
     }
   }
 
+  /**
+   * Validate the binding type.
+   *
+   * @param string $bindingType
+   *   The binding type.
+   *
+   * @throws Drupal\saml\Exception\SamlValidationException
+   */
   public function validateBindingType($bindingType) {
     $expectedBindingType = SamlConstants::BINDING_SAML2_HTTP_POST;
 
@@ -138,6 +199,14 @@ class SamlResponseValidator implements SamlMessageValidatorInterface {
     }
   }
 
+  /**
+   * Validate the destination.
+   *
+   * @param string $destination
+   *   The destination of the SAML message.
+   *
+   * @throws Drupal\saml\Exception\SamlValidationException
+   */
   public function validateDestination($destination) {
     $expectedDestination = $this
       ->request
@@ -151,6 +220,14 @@ class SamlResponseValidator implements SamlMessageValidatorInterface {
     }
   }
 
+  /**
+   * Validate encrypted assertions.
+   *
+   * @param LightSaml\Model\Protocol\Response $message
+   *   The SAML Response message.
+   *
+   * @throws Drupal\saml\Exception\SamlValidationException
+   */
   public function validateEncryptedAssertions(Response $message) {
     $wantsEncryptedResponse = $this
       ->identityProvider
@@ -163,6 +240,14 @@ class SamlResponseValidator implements SamlMessageValidatorInterface {
     }
   }
 
+  /**
+   * Validate issuer.
+   *
+   * @param LightSaml\Model\Assertion\AbstractNameID $issuer
+   *   The NameID element.
+   *
+   * @throws Drupal\saml\Exception\SamlValidationException
+   */
   public function validateIssuer(AbstractNameID $issuer) {
     try {
       $this
@@ -174,6 +259,14 @@ class SamlResponseValidator implements SamlMessageValidatorInterface {
     }
   }
 
+  /**
+   * Validate signature.
+   *
+   * @param LightSaml\Model\XmlDSig\AbstractSignatureReader $signature
+   *   The signature to be validated.
+   *
+   * @throws Drupal\saml\Exception\SamlValidationException
+   */
   public function validateSignature(AbstractSignatureReader $signature = NULL) {
     if (!$signature) {
       return;
@@ -187,6 +280,14 @@ class SamlResponseValidator implements SamlMessageValidatorInterface {
     }
   }
 
+  /**
+   * Validate status.
+   *
+   * @param LightSaml\Model\Protocol\Status $status
+   *   The status to be validated.
+   *
+   * @throws Drupal\saml\Exception\SamlValidationException
+   */
   public function validateStatus(Status $status) {
     if (!$status->isSuccess()) {
       throw new SamlValidationException(
@@ -195,6 +296,14 @@ class SamlResponseValidator implements SamlMessageValidatorInterface {
     }
   }
 
+  /**
+   * Validate SAML version.
+   *
+   * @param string $version
+   *   The SAML version to be validated.
+   *
+   * @throws Drupal\saml\Exception\SamlValidationException
+   */
   public function validateVersion($version) {
     if ($version !== SamlConstants::VERSION_20) {
       throw new SamlValidationException('SAML version 2.0 supported only');

@@ -55,6 +55,11 @@ class InboundConnectionController extends ControllerBase {
    */
   protected $messageFactory;
 
+  /**
+   * The page cache kill switch
+   *
+   * @var Drupal\Core\PageCache\ResponsePolicy\KillSwitch
+   */
   protected $killSwitch;
 
   /**
@@ -68,6 +73,8 @@ class InboundConnectionController extends ControllerBase {
    *   Metadata factory.
    * @param Drupal\saml\SamlMessageFactory $messageFactory
    *   Saml message factory.
+   * @param Drupal\Core\PageCache\ResponsePolicy\KillSwitch $killSwitch
+   *   Page cache kill switch.
    */
   public function __construct(
     EventDispatcherInterface $eventDispatcher,
