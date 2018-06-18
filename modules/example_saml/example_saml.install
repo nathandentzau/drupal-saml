@@ -1,0 +1,10 @@
+<?php
+
+function example_saml_uninstall() {
+  Drupal::configFactory()
+    ->getEditable('saml.identity_provider.example')
+    ->delete();
+  Drupal::configFactory()
+    ->getEditable('saml.service_provider.example')
+    ->delete();
+}
