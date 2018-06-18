@@ -1,0 +1,43 @@
+saml.service_provider.*:
+  type: config_entity
+  label: Service Provider
+  mapping:
+    id:
+      type: string
+      label: ID
+    label:
+      type: string
+      label: Name
+    encrypted_response:
+      type: boolean
+      label: Wants encrypted response
+    encryption_algorithm:
+      type: string
+      label: Encryption algorithm
+    encryption_certificate:
+      type: string
+      label: Encryption certificate
+    signed_response:
+      type: boolean
+      label: Wants signed response
+    signature_algorithm:
+      type: string
+      label: Signature algorithm
+    signature_certificate:
+      type: string
+      label: Signature certificate
+    signature_key:
+      type: string
+      label: Signature key
+    issuer_format:
+      type: string
+      label: Issuer format
+    name_id_format:
+      type: string
+      label: Name ID format
+    audience_restriction:
+      type: string
+      label: Audience restriction
+    acs_url:
+      type: string
+      label: Assertion consumer service URL

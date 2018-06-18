@@ -10,7 +10,7 @@ use Drupal\saml\Entity\IdentityProviderInterface;
 /**
  * Provides a user provision event.
  */
-class UserProvisionEvent extends Event {
+class ProvisionSamlUserEvent extends Event {
 
   /**
    * Event machine name.
@@ -39,7 +39,7 @@ class UserProvisionEvent extends Event {
   protected $identityProvider;
 
   /**
-   * Constructor for UserProvisionEvent.
+   * Constructor for ProvisionUserEvent.
    *
    * @param Drupal\user\UserInterface $account
    *   A Drupal user.

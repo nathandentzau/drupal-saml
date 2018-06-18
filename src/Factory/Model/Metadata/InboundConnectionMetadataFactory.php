@@ -5,6 +5,7 @@ namespace Drupal\saml\Factory\Model\Metadata;
 use LightSaml\SamlConstants;
 use LightSaml\Credential\X509Certificate;
 use LightSaml\Model\Metadata\KeyDescriptor;
+use Drupal\saml\Entity\SamlProviderInterface;
 use LightSaml\Model\Metadata\SpSsoDescriptor;
 use LightSaml\Model\Metadata\EntityDescriptor;
 use Drupal\saml\Entity\IdentityProviderInterface;
@@ -15,7 +16,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * Provides an entity descriptor factory.
  */
-class EntityDescriptorFactory implements EntityDescriptorFactoryInterface {
+class InboundConnectionMetadataFactory implements SamlMetadataFactoryInterface {
 
   /**
    * Symfony event dispatcher.
@@ -37,9 +38,13 @@ class EntityDescriptorFactory implements EntityDescriptorFactoryInterface {
   /**
    * {@inheritdoc}
    */
-  public function createServiceProvider(
-    IdentityProviderInterface $identityProvider
-  ) {
+  public function create(SamlProviderInterface $provider) {
+    if (!$provider instanceof IdentityProviderInterface) {
+      throw new \InvalidArgumentException(
+        'Provider entity must be an Identity Provider'
+      );
+    }
+
     $ssoDescriptor = new SpSsoDescriptor();
     $ssoDescriptor
       ->addAssertionConsumerService(

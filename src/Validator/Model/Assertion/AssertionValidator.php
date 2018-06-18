@@ -2,6 +2,7 @@
 
 namespace Drupal\saml\Validator\Model\Assertion;
 
+use Drupal\Core\Url;
 use LightSaml\Model\Assertion\Assertion;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\saml\Entity\IdentityProviderInterface;
@@ -115,9 +116,11 @@ class AssertionValidator extends AssertionValidatorBase {
     $audience = $item->getAllAudience()
       ? $item->getAllAudience()[0]
       : NULL;
-    $expectedAudience = $this
-      ->identityProvider
-      ->getEntityId();
+    $expectedAudience = Url::fromRoute(
+      'saml.inbound',
+      ['identityProvider' => $this->identityProvider->id()],
+      ['absolute' => TRUE]
+    )->toString();
 
     if ($audience !== $expectedAudience) {
       throw new SamlValidationException(

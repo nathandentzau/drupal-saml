@@ -2,26 +2,30 @@
 
 namespace Drupal\saml\Controller;
 
-use Drupal\saml\Event\UserProvisionEvent;
+use Drupal\Core\Url;
+use Drupal\saml\Event\ProvisionUserEvent;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\saml\Event\ProvisionSamlUserEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\externalauth\ExternalAuthInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Drupal\saml\Entity\IdentityProviderInterface;
+use Drupal\saml\Event\RedirectLocationAlterEvent;
 use LightSaml\Model\Context\SerializationContext;
 use Drupal\saml\Exception\SamlValidationException;
+use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
 use LightSaml\Model\Protocol\Response as SamlResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\saml\Factory\Model\Protocol\SamlMessageFactoryInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Drupal\saml\Factory\Model\Metadata\EntityDescriptorFactoryInterface;
+use Drupal\saml\Factory\Model\Metadata\InboundConnectionMetadataFactory;
 
 /**
  * Provides a controller for service provider routes.
  */
-class ServiceProviderController extends ControllerBase {
+class InboundConnectionController extends ControllerBase {
 
   /**
    * Symfony event dispatcher.
@@ -40,9 +44,9 @@ class ServiceProviderController extends ControllerBase {
   /**
    * SAML entity descriptor factory.
    *
-   * @var Drupal\saml\Model\Metadata\EntityDescriptorFactoryInterface
+   * @var Drupal\saml\Factory\Model\Metadata\InboundConnectionMetadataFactory
    */
-  protected $entityDescriptorFactory;
+  protected $metadataFactory;
 
   /**
    * Saml message factory.
@@ -51,6 +55,8 @@ class ServiceProviderController extends ControllerBase {
    */
   protected $messageFactory;
 
+  protected $killSwitch;
+
   /**
    * Constructor for ServiceProviderController.
    *
@@ -58,21 +64,23 @@ class ServiceProviderController extends ControllerBase {
    *   Symfony event dispatcher.
    * @param Drupal\externalauth\ExternalAuthInterface $externalAuth
    *   Drupal external auth service.
-   * @param Drupal\saml\Model\Metadata\EntityDescriptorFactoryInterface $entityDescriptorFactory
-   *   Entity descriptor factory.
+   * @param Drupal\saml\Factory\Model\Metadata\InboundConnectionMetadataFactory $metadataFactory
+   *   Metadata factory.
    * @param Drupal\saml\SamlMessageFactory $messageFactory
    *   Saml message factory.
    */
   public function __construct(
     EventDispatcherInterface $eventDispatcher,
     ExternalAuthInterface $externalAuth,
-    EntityDescriptorFactoryInterface $entityDescriptorFactory,
-    SamlMessageFactoryInterface $messageFactory
+    InboundConnectionMetadataFactory $metadataFactory,
+    SamlMessageFactoryInterface $messageFactory,
+    KillSwitch $killSwitch
   ) {
     $this->eventDispatcher = $eventDispatcher;
     $this->externalAuth = $externalAuth;
-    $this->entityDescriptorFactory = $entityDescriptorFactory;
+    $this->metadataFactory = $metadataFactory;
     $this->messageFactory = $messageFactory;
+    $this->killSwitch = $killSwitch;
   }
 
   /**
@@ -82,8 +90,9 @@ class ServiceProviderController extends ControllerBase {
     return new static(
       $container->get('event_dispatcher'),
       $container->get('externalauth.externalauth'),
-      $container->get('saml.entity_descriptor_factory'),
-      $container->get('saml.message_factory')
+      $container->get('saml.inbound.metadata_factory'),
+      $container->get('saml.response_factory'),
+      $container->get('page_cache_kill_switch')
     );
   }
 
@@ -142,8 +151,8 @@ class ServiceProviderController extends ControllerBase {
       $this
         ->eventDispatcher
         ->dispatch(
-          UserProvisionEvent::NAME,
-          new UserProvisionEvent($account, $message, $identityProvider)
+          ProvisionSamlUserEvent::NAME,
+          new ProvisionSamlUserEvent($account, $message, $identityProvider)
         );
     }
     catch (SamlValidationException $e) {
@@ -152,7 +161,21 @@ class ServiceProviderController extends ControllerBase {
       );
     }
 
-    return new RedirectResponse('/');
+    $this->killSwitch->trigger();
+
+    $event = new RedirectLocationAlterEvent(
+      $identityProvider,
+      Url::fromRoute('<front>')
+    );
+    $this
+      ->eventDispatcher
+      ->dispatch(RedirectLocationAlterEvent::class, $event);
+
+    return new RedirectResponse($event->getLocation()->toString());
+  }
+
+  public function login() {
+
   }
 
   /**

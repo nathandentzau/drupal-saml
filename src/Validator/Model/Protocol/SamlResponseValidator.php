@@ -19,7 +19,7 @@ use Drupal\saml\Validator\Model\Assertion\CompositeIssuerValidator;
 use LightSaml\Validator\Model\Assertion\AssertionValidatorInterface;
 use Drupal\saml\Validator\Model\Assertion\SignatureValidatorInterface;
 
-class ResponseValidator implements ResponseValidatorInterface {
+class SamlResponseValidator implements SamlMessageValidatorInterface {
 
   protected $identityProvider;
 

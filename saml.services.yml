@@ -1,10 +1,17 @@
 services:
-  saml.entity_descriptor_factory:
-    class: Drupal\saml\Factory\Model\Metadata\EntityDescriptorFactory
+  saml.inbound.metadata_factory:
+    class: Drupal\saml\Factory\Model\Metadata\InboundConnectionMetadataFactory
     arguments:
       - '@event_dispatcher'
 
-  saml.message_factory:
-    class: Drupal\saml\Factory\Model\Protocol\SamlMessageFactory
+  saml.response_factory:
+    class: Drupal\saml\Factory\Model\Protocol\SamlResponseFactory
     arguments:
       - '@event_dispatcher'
+
+  saml.relay_state_subscriber:
+    class: Drupal\saml\EventSubscriber\RelayStateSubscriber
+    arguments:
+      - '@request_stack'
+    tags:
+      - { name: event_subscriber }

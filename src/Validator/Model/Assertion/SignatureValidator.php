@@ -52,6 +52,11 @@ class SignatureValidator implements SignatureValidatorInterface {
       ->getSignatureAlgorithm();
     $expectedSignatureAlgorithm = $signature->getAlgorithm();
 
+    print_r([
+      $signatureAlgorithm,
+      $expectedSignatureAlgorithm
+    ]);
+
     if ($signatureAlgorithm !== $expectedSignatureAlgorithm) {
       throw new SamlValidationException(
         'Signature Algorithm does not match expected value'

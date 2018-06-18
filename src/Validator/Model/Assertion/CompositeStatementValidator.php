@@ -9,6 +9,7 @@ use LightSaml\Model\Assertion\AttributeStatement;
 use Drupal\saml\Exception\SamlValidationException;
 use LightSaml\Validator\Model\Statement\StatementValidator;
 use LightSaml\Validator\Model\Statement\StatementValidatorInterface;
+use LightSaml\SamlConstants;
 
 /**
  * Provides a statement validator.
@@ -63,11 +64,8 @@ class CompositeStatementValidator implements StatementValidatorInterface {
     $authnContext = $statement
       ->getAuthnContext()
       ->getAuthnContextClassRef();
-    $expectedAuthnContext = $this
-      ->identityProvider
-      ->getAuthnContext();
 
-    if ($expectedAuthnContext && $authnContext !== $expectedAuthnContext) {
+    if ($authnContext !== SamlConstants::AUTHN_CONTEXT_PASSWORD_PROTECTED_TRANSPORT) {
       throw new SamlValidationException(
         sprintf('AuthnContext %s did not match expected value', $authnContext)
       );
