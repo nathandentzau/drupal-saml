@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\example_saml\EventSubscriber;
+namespace Drupal\saml_example\EventSubscriber;
 
 use Drupal\Core\Url;
 use LightSaml\SamlConstants;

@@ -1,6 +1,9 @@
 <?php
 
-function example_saml_uninstall() {
+/**
+ * Implements hook_uninstall().
+ */
+function saml_example_uninstall() {
   Drupal::configFactory()
     ->getEditable('saml.identity_provider.example')
     ->delete();

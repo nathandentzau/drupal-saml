@@ -1,6 +1,6 @@
 {
-    "name": "drupal/saml",
-    "description": "SAML 2.0 API for Drupal 8.",
+    "name": "nathandentzau/drupal-saml",
+    "description": "SAML 2.0 integration for Drupal 8.",
     "type": "drupal-module",
     "license": "MIT",
     "authors": [
@@ -9,9 +9,18 @@
             "email": "nathan.dentzau@gmail.com"
         }
     ],
+    "repositories": [
+      {
+        "type": "composer",
+        "url": "https://packages.drupal.org/8"
+      }
+    ],
     "require": {
-        "php": ">=5.6",
+        "php": ">=7.1",
         "drupal/externalauth": "^1.1",
         "lightsaml/lightsaml": "^1.4"
+    },
+    "require-dev": {
+        "drupal/core": "^8.5"
     }
 }

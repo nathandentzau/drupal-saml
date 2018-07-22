@@ -1,0 +1,5 @@
+services:
+  saml_example.example_event_subscriber:
+    class: Drupal\saml_example\EventSubscriber\ExampleEventSubscriber
+    tags:
+      - { name: event_subscriber }

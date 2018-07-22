@@ -1,4 +1,3 @@
-services:
   saml.inbound.metadata_factory:
     class: Drupal\saml\Factory\Model\Metadata\InboundConnectionMetadataFactory
     arguments:
