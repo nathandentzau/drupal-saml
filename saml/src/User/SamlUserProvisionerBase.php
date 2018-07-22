@@ -21,7 +21,7 @@ abstract class SamlUserProvisionerBase implements EventSubscriberInterface, Cont
   public function onProvisionUser(ProvisionSamlUserEvent $event): void {
     $identityProvider = $event->getIdentityProvider();
 
-    if ($identityProvider->id() !== $this->getIdentityProviderIdentifer()) {
+    if ($identityProvider->id() !== $this->getIdentityProviderIdentifier()) {
       return; // bail, this is not on IdP you're looking for...
     }
 
