@@ -5,6 +5,7 @@ namespace Drupal\saml\User;
 use Drupal\user\UserInterface;
 use LightSaml\Model\Protocol\Response;
 use Drupal\saml\Event\ProvisionSamlUserEvent;
+use Drupal\saml\Entity\IdentityProviderInterface;
 use Drupal\saml\Attribute\AttributeFieldMapInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -56,7 +57,7 @@ abstract class SamlUserProvisionerBase implements EventSubscriberInterface, Cont
       ->getFirstAttributeStatement();
     $attributeFieldMapClasses = $this->getAttributeFieldMapClasses();
 
-    foreach ($attributeFieldMaps as $attributeFieldMapClass) {
+    foreach ($attributeFieldMapClasses as $attributeFieldMapClass) {
       $attributeFieldMap = $this
         ->instantiateAttributeFieldMap($attributeFieldMapClass);
       $rawAttribute = $attributeStatement
