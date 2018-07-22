@@ -1,5 +1,7 @@
 <?php
 
+namespace Drupal\saml\User;
+
 use LightSaml\Model\Protocol\Response;
 use Drupal\saml\Event\ProvisionSamlUserEvent;
 use Drupal\saml\Attribute\AttributeFieldMapInterface;
@@ -7,8 +9,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
-namespace Drupal\saml\User;
 
 abstract class SamlUserProvisionerBase implements EventSubscriberInterface, ContainerAwareInterface {
 
@@ -40,7 +40,7 @@ abstract class SamlUserProvisionerBase implements EventSubscriberInterface, Cont
     return $this->container;
   }
 
-  public function setContainer(ContainerInterface $container) {
+  public function setContainer(ContainerInterface $container = NULL) {
     $this->container = $container;
     return $this;
   }

@@ -158,7 +158,7 @@ class InboundConnectionController extends ControllerBase {
       $this
         ->eventDispatcher
         ->dispatch(
-          ProvisionSamlUserEvent::NAME,
+          ProvisionSamlUserEvent::class,
           new ProvisionSamlUserEvent($account, $message, $identityProvider)
         );
     }

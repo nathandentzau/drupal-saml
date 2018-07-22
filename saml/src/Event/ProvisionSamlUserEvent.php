@@ -13,11 +13,6 @@ use Drupal\saml\Entity\IdentityProviderInterface;
 class ProvisionSamlUserEvent extends Event {
 
   /**
-   * Event machine name.
-   */
-  const NAME = 'saml.provision_user';
-
-  /**
    * Drupal user.
    *
    * @var Drupal\user\UserInterface
