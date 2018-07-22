@@ -2,6 +2,7 @@
 
 namespace Drupal\saml\User;
 
+use Drupal\user\UserInterface;
 use LightSaml\Model\Protocol\Response;
 use Drupal\saml\Event\ProvisionSamlUserEvent;
 use Drupal\saml\Attribute\AttributeFieldMapInterface;
@@ -46,7 +47,7 @@ abstract class SamlUserProvisionerBase implements EventSubscriberInterface, Cont
   }
 
   protected function doProvisionUser(
-    AccountInterface $account,
+    UserInterface $account,
     IdentityProviderInterface $identityProvider,
     Response $message
   ): void {
