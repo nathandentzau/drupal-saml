@@ -10,17 +10,23 @@
         }
     ],
     "repositories": [
-      {
-        "type": "composer",
-        "url": "https://packages.drupal.org/8"
-      }
+        {
+          "type": "composer",
+          "url": "https://packages.drupal.org/8"
+        }
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": ">=7.1",
+        "drupal/core": "^8.6",
         "drupal/externalauth": "^1.1",
         "lightsaml/lightsaml": "^1.4"
     },
     "require-dev": {
-        "drupal/core": "^8.5"
+        "phpunit/phpunit": "^6.5"
     }
 }
