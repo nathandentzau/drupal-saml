@@ -1,5 +1,5 @@
 services:
-  saml_example.example_event_subscriber:
-    class: Drupal\saml_example\EventSubscriber\ExampleEventSubscriber
+  saml_example.field_mapper.first_name:
+    class: Drupal\saml_example\Field\FirstNameFieldMapper
     tags:
-      - { name: event_subscriber }
+      - { name: saml.field_mapper }

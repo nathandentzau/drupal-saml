@@ -4,28 +4,6 @@ encrypted_response: false
 encryption_algorithm: http://www.w3.org/2001/04/xmlenc#aes256-cbc
 encryption_certificate: |
   -----BEGIN CERTIFICATE-----
-  MIIDoDCCAoigAwIBAgIGAV2SAMihMA0GCSqGSIb3DQEBCwUAMIGQMQswCQYDVQQGEwJVUzETMBEG
-  A1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwET2t0YTEU
-  MBIGA1UECwwLU1NPUHJvdmlkZXIxETAPBgNVBAMMCGJjYnNwbGFuMRwwGgYJKoZIhvcNAQkBFg1p
-  bmZvQG9rdGEuY29tMB4XDTE3MDczMDA1MzczMVoXDTI3MDczMDA1MzgzMFowgZAxCzAJBgNVBAYT
-  AlVTMRMwEQYDVQQIDApDYWxpZm9ybmlhMRYwFAYDVQQHDA1TYW4gRnJhbmNpc2NvMQ0wCwYDVQQK
-  DARPa3RhMRQwEgYDVQQLDAtTU09Qcm92aWRlcjERMA8GA1UEAwwIYmNic3BsYW4xHDAaBgkqhkiG
-  9w0BCQEWDWluZm9Ab2t0YS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDEt7Y/
-  L5gM+7PNheyFcKQ28ntzxCn1yExDld14lwat6JqdhJ/4Z7uvrsiQtFVxQL9G0iLegoLZjsBDo3CK
-  KlTyjs+nlNTnxF6tOgF/ez9iNhxrflAoiV6MBn2GGPVZm8KA44PXKbuoWM5Yg+oQXGughDpsMY8K
-  PvJe8VX9Q5x+JxEqEa7h/7PzQK+L0NjghlXEYbW10vLg04hvNhRX32e1USEZNh9QrO+rc03RAPHK
-  t+2HSvvDRvC+lncq8DjckcMK9Qjsa1qvOW9CPshQcY6Zz7+jkNU3Djedoght4sVdlNV9crJS4pRr
-  Hg7FY9f8s5R640cyGyRrViPMaj6OUNIBAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAK+fbhQnu+RH
-  EoH/8T5dxE0R9+iSaonTVYvy48XoriQ4oOXX/4HjDcQulU6CmjqJLwoeFcQvTl+/TCQxun1nk5bG
-  c6YhtYIuRr5KBUDipOUDtzSU/7gA7Zm/UY7p1i1NqHocRXifyCsf0oIL/515uclSB7DRka7qcYij
-  tsLaJ5vjuvu0lGFXPWA6uPwyKLNUQYTvAIsbdAP16T+6ev5e+t164N/0YN6/CSsQtzHDfqhUjGdo
-  cK0Gotl92G5cxmc5PhjOy78WRNz+rR7vDaQyCQBhksqyR/A20wgRMjOlhvs67mSW4sizY92tvo7C
-  j7cEmk7JdFloq5ACQzePGSxGIac=
-  -----END CERTIFICATE-----
-signed_response: true
-signature_algorithm: http://www.w3.org/2001/04/xmldsig#rsa-sha256
-signature_certificate: |
-  -----BEGIN CERTIFICATE-----
   MIIDaTCCAlCgAwIBAgIBADANBgkqhkiG9w0BAQ0FADBOMQswCQYDVQQGEwJ1czEL
   MAkGA1UECAwCTUExGDAWBgNVBAoMD05hdGVEZW50emF1Lk5ldDEYMBYGA1UEAwwP
   bmF0ZWRlbnR6YXUubmV0MB4XDTE4MDYxODAxMTUyOVoXDTQ1MTEwMjAxMTUyOVow
@@ -46,7 +24,7 @@ signature_certificate: |
   eqpML3zRLRYbt1fYrZ2/FMIi6kNVaflgv/9rzo3LK+hcWGpU87H5bO7loHDq9EYF
   QY0Ng0LqGLT3hrD9qQ==
   -----END CERTIFICATE-----
-signature_key: |
+encryption_key: |
   -----BEGIN PRIVATE KEY-----
   MIIEwQIBADANBgkqhkiG9w0BAQEFAASCBKswggSnAgEAAoIBAgDXF7CS2YwzsN68
   FITzq+hI4lKFUazNGvtE4W4wNGDqZwGgqLgpUn1SshayyBP6cGbZRiXhOl1cHIEA
@@ -75,7 +53,29 @@ signature_key: |
   1hPn/JjxWoqsllo5qZ+7GyakNmkQK62a93BgU4lpL2svGm7NxGFMMjJmOpp8GWsL
   ZmHXv4tD5bZ1JOlejM8bLs3Y3fdL
   -----END PRIVATE KEY-----
+signed_response: true
+signature_algorithm: http://www.w3.org/2001/04/xmldsig-more#rsa-sha256
+signature_certificate: |
+  -----BEGIN CERTIFICATE-----
+  MIIDoDCCAoigAwIBAgIGAV2SAMihMA0GCSqGSIb3DQEBCwUAMIGQMQswCQYDVQQGEwJVUzETMBEG
+  A1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwET2t0YTEU
+  MBIGA1UECwwLU1NPUHJvdmlkZXIxETAPBgNVBAMMCGJjYnNwbGFuMRwwGgYJKoZIhvcNAQkBFg1p
+  bmZvQG9rdGEuY29tMB4XDTE3MDczMDA1MzczMVoXDTI3MDczMDA1MzgzMFowgZAxCzAJBgNVBAYT
+  AlVTMRMwEQYDVQQIDApDYWxpZm9ybmlhMRYwFAYDVQQHDA1TYW4gRnJhbmNpc2NvMQ0wCwYDVQQK
+  DARPa3RhMRQwEgYDVQQLDAtTU09Qcm92aWRlcjERMA8GA1UEAwwIYmNic3BsYW4xHDAaBgkqhkiG
+  9w0BCQEWDWluZm9Ab2t0YS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDEt7Y/
+  L5gM+7PNheyFcKQ28ntzxCn1yExDld14lwat6JqdhJ/4Z7uvrsiQtFVxQL9G0iLegoLZjsBDo3CK
+  KlTyjs+nlNTnxF6tOgF/ez9iNhxrflAoiV6MBn2GGPVZm8KA44PXKbuoWM5Yg+oQXGughDpsMY8K
+  PvJe8VX9Q5x+JxEqEa7h/7PzQK+L0NjghlXEYbW10vLg04hvNhRX32e1USEZNh9QrO+rc03RAPHK
+  t+2HSvvDRvC+lncq8DjckcMK9Qjsa1qvOW9CPshQcY6Zz7+jkNU3Djedoght4sVdlNV9crJS4pRr
+  Hg7FY9f8s5R640cyGyRrViPMaj6OUNIBAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAK+fbhQnu+RH
+  EoH/8T5dxE0R9+iSaonTVYvy48XoriQ4oOXX/4HjDcQulU6CmjqJLwoeFcQvTl+/TCQxun1nk5bG
+  c6YhtYIuRr5KBUDipOUDtzSU/7gA7Zm/UY7p1i1NqHocRXifyCsf0oIL/515uclSB7DRka7qcYij
+  tsLaJ5vjuvu0lGFXPWA6uPwyKLNUQYTvAIsbdAP16T+6ev5e+t164N/0YN6/CSsQtzHDfqhUjGdo
+  cK0Gotl92G5cxmc5PhjOy78WRNz+rR7vDaQyCQBhksqyR/A20wgRMjOlhvs67mSW4sizY92tvo7C
+  j7cEmk7JdFloq5ACQzePGSxGIac=
+  -----END CERTIFICATE-----
+issuer: http://www.okta.com/exkfi1eskvYFYWhk90h7
 issuer_format: urn:oasis:names:tc:SAML:2.0:nameid-format:entity
 name_id_format: urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified
-audience_restriction: https://www.okta.com/saml2/service-provider/spmdpdlewpchdqyffxcc
-acs_url: https://bcbsplan.oktapreview.com/sso/saml2/0oafi2ciafE18obwb0h7
+email_attribute: EmailAddress
