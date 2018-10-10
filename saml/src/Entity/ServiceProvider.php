@@ -2,9 +2,6 @@
 
 namespace Drupal\saml\Entity;
 
-use Drupal\Core\Url;
-use Drupal\Core\Config\Entity\ConfigEntityBase;
-
 /**
  * Provides an Service Provider configuration entity.
  *
@@ -17,72 +14,20 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   }
  * )
  */
-class ServiceProvider extends ConfigEntityBase implements ServiceProviderInterface {
-
-  use SamlProviderTrait;
-
-  /**
-   * Assertion Consumer Service URL.
-   *
-   * @var string
-   */
-  protected $acs_url;
-
-  /**
-   * AuthnContext Audience Restriction
-   *
-   * @var string
-   */
-  protected $audience_restriction;
-
-  /**
-   * Signature key.
-   *
-   * @var string
-   */
-  protected $signature_key;
+class ServiceProvider extends SamlProviderBase {
 
   /**
    * {@inheritdoc}
    */
-  public function getAssertionConsumerServiceUrl() {
-    return $this->acs_url;
+  public function getSignatureResponseKey() {
+    return NULL;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getAudienceRestriction() {
-    return $this->audience_restriction;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSignatureKey() {
-    return $this->signature_key;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getIssuer() {
-    return Url::fromRoute(
-      'saml.outbound',
-      ['serviceProvider' => $this->id()],
-      ['absolute' => TRUE]
-    )->toString();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getMetadataUrl() {
-    return Url::fromRoute(
-      'saml.idp.metadata',
-      ['serviceProvider' => $this->id()],
-      ['absolute' => TRUE]
-    )->toString();
+  public function setSignatureResponseKey($key) {
+    return $this;
   }
 
 }

@@ -3,33 +3,42 @@
 namespace Drupal\saml\Event;
 
 use Symfony\Component\EventDispatcher\Event;
+use Drupal\saml\Entity\SamlProviderInterface;
 use LightSaml\Model\Metadata\EntityDescriptor;
 
 /**
- * Provides an entity descriptor alter event.
+ * Provides an entity descriptor (metadata) alter event.
  */
 class EntityDescriptorAlterEvent extends Event {
 
   /**
-   * Event name.
-   */
-  const NAME = 'saml.entity_descriptor_alter';
-
-  /**
-   * Entity descriptor.
+   * The entity descriptor.
    *
    * @var LightSaml\Model\Metadata\EntityDescriptor
    */
   protected $entityDescriptor;
 
   /**
+   * The SAML provider.
+   *
+   * @var Drupal\saml\Entity\SamlProviderInterface
+   */
+  protected $samlProvider;
+
+  /**
    * Constructor for EntityDescriptorAlterEvent.
    *
-   * @param EntityDescriptor $entityDescriptor
+   * @param LightSaml\Model\Metadata\EntityDescriptor $entityDescriptor
    *   The entity descriptor.
+   * @param Drupal\saml\Entity\SamlProviderInterface $samlProvider
+   *   The SAML provider.
    */
-  public function __construct(EntityDescriptor $entityDescriptor) {
+  public function __construct(
+    EntityDescriptor $entityDescriptor,
+    SamlProviderInterface $samlProvider
+  ) {
     $this->entityDescriptor = $entityDescriptor;
+    $this->samlProvider = $samlProvider;
   }
 
   /**
@@ -54,6 +63,16 @@ class EntityDescriptorAlterEvent extends Event {
   public function setEntityDescriptor(EntityDescriptor $entityDescriptor) {
     $this->entityDescriptor = $entityDescriptor;
     return $this;
+  }
+
+  /**
+   * Get the SAML provider.
+   *
+   * @return Drupal\saml\Entity\SamlProviderInterface
+   *   The SAML provider.
+   */
+  public function getSamlProvider() {
+    return $this->samlProvider;
   }
 
 }

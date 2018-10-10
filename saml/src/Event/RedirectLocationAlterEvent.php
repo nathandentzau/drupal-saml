@@ -4,7 +4,7 @@ namespace Drupal\saml\Event;
 
 use Drupal\Core\Url;
 use Symfony\Component\EventDispatcher\Event;
-use Drupal\saml\Entity\IdentityProviderInterface;
+use Drupal\saml\Entity\SamlProviderInterface;
 
 /**
  * Provides an event to later the redirect location in the inbound flow.
@@ -12,11 +12,11 @@ use Drupal\saml\Entity\IdentityProviderInterface;
 class RedirectLocationAlterEvent extends Event {
 
   /**
-   * The Identity Provider.
+   * The Service Provider.
    *
-   * @var Drupal\saml\Entity\IdentityProviderInterface
+   * @var Drupal\saml\Entity\SamlProviderInterface
    */
-  protected $identityProvider;
+  protected $serviceProvider;
 
   /**
    * The redirect location.
@@ -28,27 +28,27 @@ class RedirectLocationAlterEvent extends Event {
   /**
    * Constructor for RedirectLocationAlterEvent.
    *
-   * @param Drupal\saml\Entity\IdentityProviderInterface $identityProvider
-   *   The Identity Provider.
+   * @param Drupal\saml\Entity\SamlProviderInterfacee $serviceProvider
+   *   The Service Provider.
    * @param Drupal\Core\Url $location
    *   The redirect location.
    */
   public function __construct(
-    IdentityProviderInterface $identityProvider,
+    SamlProviderInterface $serviceProvider,
     Url $location
   ) {
-    $this->identityProvider = $identityProvider;
+    $this->serviceProvider = $serviceProvider;
     $this->location = $location;
   }
 
   /**
-   * Get the Identity Provider.
+   * Get the Service Provider.
    *
-   * @return Drupal\saml\Entity\IdentityProviderInterface
-   *   The Identity Provider.
+   * @return Drupal\saml\Entity\SamlProviderInterface
+   *   The Service Provider.
    */
-  public function getIdentityProvider() {
-    return $this->identityProvider;
+  public function getServiceProvider() {
+    return $this->serviceProvider;
   }
 
   /**

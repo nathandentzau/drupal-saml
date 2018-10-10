@@ -3,7 +3,7 @@
 namespace Drupal\saml\Validator\Model\Assertion;
 
 use LightSaml\Model\Assertion\AbstractStatement;
-use Drupal\saml\Entity\IdentityProviderInterface;
+use Drupal\saml\Entity\SamlProviderInterface;
 use LightSaml\Error\LightSamlValidationException;
 use LightSaml\Model\Assertion\AttributeStatement;
 use Drupal\saml\Exception\SamlValidationException;
@@ -17,11 +17,11 @@ use LightSaml\SamlConstants;
 class CompositeStatementValidator implements StatementValidatorInterface {
 
   /**
-   * Identity Provider.
+   * Service Provider.
    *
-   * @var Drupal\saml\Entity\IdentityProviderInterface
+   * @var Drupal\saml\Entity\SamlProviderInterface
    */
-  protected $identityProvider;
+  protected $provider;
 
   /**
    * Statement validator
@@ -33,16 +33,16 @@ class CompositeStatementValidator implements StatementValidatorInterface {
   /**
    * Constructor for CompositeStatementValidator.
    *
-   * @param Drupal\saml\Entity\IdentityProviderInterface $identityProvider
-   *   SAML Identity Provider.
+   * @param Drupal\saml\Entity\SamlProviderInterface $provider
+   *   SAML Service Provider.
    * @param LightSaml\Validator\Model\Statement\StatementValidatorInterface|NULL $validator
    *   Statement validator.
    */
   public function __construct(
-    IdentityProviderInterface $identityProvider,
+    SamlProviderInterface $provider,
     StatementValidatorInterface $validator = NULL
   ) {
-    $this->identityProvider = $identityProvider;
+    $this->provider = $provider;
     $this->validator = $validator ?: new StatementValidator();
   }
 

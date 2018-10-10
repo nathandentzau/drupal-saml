@@ -4,6 +4,9 @@ namespace Drupal\saml\Factory\Model\Metadata;
 
 use Drupal\saml\Entity\SamlProviderInterface;
 
+/**
+ * Provides a saml metadata factory interface.
+ */
 interface SamlMetadataFactoryInterface {
 
   /**

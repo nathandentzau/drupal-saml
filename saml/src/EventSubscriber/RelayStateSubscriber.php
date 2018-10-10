@@ -37,8 +37,7 @@ class RelayStateSubscriber implements EventSubscriberInterface {
    *   The redirect location alter event.
    */
   public function onAlterLocation(RedirectLocationAlterEvent $event) {
-    $location = $this
-      ->requestStack
+    $location = $this->requestStack
       ->getMasterRequest()
       ->request
       ->get('RelayState');
@@ -48,27 +47,6 @@ class RelayStateSubscriber implements EventSubscriberInterface {
     }
 
     $event->setLocation(Url::fromUri($location));
-    $event->stopPropagation();
-  }
-
-  /**
-   * Alter the SAML response to include a RelayState if set.
-   *
-   * @param Drupal\saml\Event\SamlResponseAlterEvent $event
-   *   The saml response alter event.
-   */
-  public function onAlterSamlResponse(SamlResponseAlterEvent $event) {
-    $relayState = $this
-      ->requestStack
-      ->getMasterRequest()
-      ->query
-      ->get('redirectTo');
-
-    $event
-      ->getResponse()
-      ->setRelayState(
-        Url::fromUri($relayState)->toString()
-      );
   }
 
   /**
@@ -76,8 +54,7 @@ class RelayStateSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     return [
-      RedirectLocationAlterEvent::class => [['onAlterLocation', 1000]],
-      SamlResponseAlterEvent::class => [['onAlterSamlResponse', 1000]],
+      RedirectLocationAlterEvent::class => ['onAlterLocation', 100],
     ];
   }
 

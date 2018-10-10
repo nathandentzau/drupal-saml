@@ -25,7 +25,7 @@ class CompositeNameIdValidator extends AbstractCompositeNameIdValidator {
 
     $subjectNameIdFormat = $nameId->getFormat();
     $expectedSubjectNameIdFormat = $this
-      ->getIdentityProvider()
+      ->getServiceProvider()
       ->getNameIdFormat();
 
     if ($subjectNameIdFormat !== $expectedSubjectNameIdFormat) {

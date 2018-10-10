@@ -2,40 +2,23 @@
 
 namespace Drupal\saml\Factory\Model\Protocol;
 
-use Drupal\saml\Helper;
-use LightSaml\SamlConstants;
-use Drupal\user\UserInterface;
 use LightSaml\Credential\KeyHelper;
-use LightSaml\Model\Protocol\Status;
 use LightSaml\Binding\BindingFactory;
-use LightSaml\Model\Assertion\Issuer;
-use LightSaml\Model\Assertion\NameID;
-use LightSaml\Model\Assertion\Subject;
 use LightSaml\Model\Protocol\Response;
-use LightSaml\Model\Assertion\Assertion;
-use Drupal\Core\Session\AccountInterface;
+use LightSaml\Credential\X509Credential;
 use LightSaml\Credential\X509Certificate;
-use LightSaml\Model\Assertion\Conditions;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use LightSaml\Model\XmlDSig\SignatureWriter;
-use Drupal\saml\Event\SamlResponseAlterEvent;
+use Drupal\saml\Entity\SamlProviderInterface;
 use LightSaml\Context\Profile\MessageContext;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\saml\Event\ReceiveSamlMessageEvent;
-use Drupal\saml\Entity\ServiceProviderInterface;
-use Drupal\saml\Entity\IdentityProviderInterface;
-use LightSaml\Model\Assertion\AttributeStatement;
-use LightSaml\Model\Assertion\AudienceRestriction;
-use LightSaml\Model\Assertion\SubjectConfirmation;
-use LightSaml\Model\Assertion\SubjectConfirmationData;
-use Drupal\saml\Builder\Model\Protocol\ResponseBuilder;
-use LightSaml\Model\Assertion\EncryptedAssertionWriter;
-use Drupal\saml\Validator\Model\Protocol\ResponseValidator;
+use LightSaml\Model\Context\DeserializationContext;
 use Drupal\saml\Validator\Model\Protocol\SamlResponseValidator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Drupal\saml\Factory\Model\Protocol\SamlMessageFactoryInterface;
 
 /**
- * Provides a saml message factory.
+ * Provides a saml response factory.
  */
 class SamlResponseFactory implements SamlMessageFactoryInterface {
 
@@ -72,114 +55,15 @@ class SamlResponseFactory implements SamlMessageFactoryInterface {
   /**
    * {@inheritdoc}
    */
-  public function create(
-    ServiceProviderInterface $serviceProvider,
-    AccountInterface $account,
-    \DateTime $currentTime = NULL
-  ) {
-    $currentTime = $currentTime ?: new \DateTime();
-    $issuer = (new Issuer())
-      ->setFormat($serviceProvider->getIssuerFormat())
-      ->setValue($serviceProvider->getIssuer());
-    $status = (new Status())
-      ->setSuccess();
-    $signature = NULL;
-
-    if ($serviceProvider->wantsSignedResponse()) {
-      $certificiate = (new X509Certificate())
-        ->loadPem($serviceProvider->getSignatureCertificate());
-      $privateKey = KeyHelper::createPrivateKey(
-        $serviceProvider->getSignatureKey(),
-        NULL,
-        FALSE,
-        XMLSecurityKey::RSA_SHA256
-      );
-
-      $signature = SignatureWriter::createByKeyAndCertificate(
-        $certificiate,
-        $privateKey
-      );
-    }
-
-    $currentTime = new \DateTime();
-
-    $subjectNameId = (new NameID())
-      ->setFormat(SamlConstants::NAME_ID_FORMAT_UNSPECIFIED)
-      ->setValue($account->getEmail());
-    $subjectConfirmationData = (new SubjectConfirmationData())
-      ->setNotBefore($currentTime->modify('-5 minutes'))
-      ->setNotOnOrAfter($currentTime->modify('+5 minutes'))
-      ->setRecipient($serviceProvider->getAssertionConsumerServiceUrl());
-    $subjectConfirmation = (new SubjectConfirmation())
-      ->setMethod(SamlConstants::CONFIRMATION_METHOD_BEARER)
-      ->setSubjectConfirmationData($subjectConfirmationData);
-    $subject = (new Subject())
-      ->setNameID($subjectNameId)
-      ->addSubjectConfirmation($subjectConfirmation);
-
-    $audienceRestriction = (new AudienceRestriction())
-      ->addAudience($serviceProvider->getAudienceRestriction());
-    $conditions = (new Conditions())
-      ->setNotBefore($currentTime->modify('-5 minutes'))
-      ->setNotOnOrAfter($currentTime->modify('+5 minutes'))
-      ->addItem($audienceRestriction);
-
-    $attributeStatement = new AttributeStatement();
-
-    $assertion = (new Assertion())
-      ->setId(Helper::generateId())
-      ->setIssueInstant($currentTime)
-      ->setIssuer($issuer)
-      ->setSubject($subject)
-      ->setConditions($conditions)
-      ->addItem($attributeStatement);
-
-    $response = (new Response())
-      ->setID(Helper::generateId())
-      ->setIssueInstant($currentTime)
-      ->setDestination($serviceProvider->getAssertionConsumerServiceUrl())
-      ->setIssuer($issuer)
-      ->setStatus($status)
-      ->addAssertion($assertion);
-
-    if ($signature) {
-      $response->setSignature($signature);
-    }
-
-    $event = new SamlResponseAlterEvent($response, $serviceProvider, $account);
-    $this
-      ->eventDispatcher
-      ->dispatch(SamlResponseAlterEvent::class, $event);
-
-    $response = $event->getResponse();
-
-    if ($serviceProvider->wantsEncryptedResponse()) {
-      $assertions = $response->getAllAssertions();
-
-      foreach ($assertions as $assertion) {
-        $certificate = (new X509Certificate())
-          ->loadPem($serviceProvider->getEncryptionCertificate());
-        $publicKey = KeyHelper::createPublicKey($certificate);
-
-        $encryptedAssertion = new EncryptedAssertionWriter(
-          XMLSecurityKey::AES256_CBC,
-          XMLSecurityKey::RSA_SHA256
-        );
-        $encryptedAssertion->encrypt($assertion, $publicKey);
-
-        $response->addEncryptedAssertion($encryptedAssertion);
-        $response->removeAssertion($assertion);
-      }
-    }
-
-    return $response;
+  public function create(SamlProviderInterface $provider) {
+    return new Response();
   }
 
   /**
    * {@inheritdoc}
    */
   public function createFromRequest(
-    IdentityProviderInterface $identityProvider,
+    SamlProviderInterface $serviceProvider,
     Request $request
   ) {
     $context = new MessageContext();
@@ -194,24 +78,56 @@ class SamlResponseFactory implements SamlMessageFactoryInterface {
 
     if ($message instanceof Response) {
       if (!empty($message->getAllEncryptedAssertions())) {
-        Helper::decryptAssertions(
+        $this->decryptAssertions(
           $message,
-          $identityProvider->getEncryptionCertificate(),
-          $identityProvider->getEncryptionKey(),
-          $identityProvider->getEncryptionAlgorithm()
+          $serviceProvider->getEncryptionResponseCertificate(),
+          $serviceProvider->getEncryptionResponseKey(),
+          $serviceProvider->getEncryptionResponseAlgorithm()
         );
       }
 
-      (new SamlResponseValidator($identityProvider, $request))
+      (new SamlResponseValidator($serviceProvider, $request))
         ->validate($context);
     }
 
     $this->eventDispatcher->dispatch(
-      ReceiveSamlMessageEvent::NAME,
-      new ReceiveSamlMessageEvent($context, $identityProvider)
+      ReceiveSamlMessageEvent::class,
+      new ReceiveSamlMessageEvent($context, $serviceProvider)
     );
 
     return $message;
+  }
+
+  /**
+   * Decrypt SAML assertions.
+   *
+   * @param LightSaml\Model\Protocol\Response $message
+   *   SAML Response message.
+   * @param string $certificate
+   *   X509 certificate.
+   * @param string $key
+   *   RSA private key.
+   * @param string $encryptionAlgorithm
+   *   XML encryption algorithm.
+   */
+  protected function decryptAssertions(
+    Response $message,
+    $certificate,
+    $key,
+    $encryptionAlgorithm = XMLSecurityKey::RSA_SHA256
+  ) {
+    $certificate = (new X509Certificate())->loadPem($certificate);
+    $key = KeyHelper::createPrivateKey($key, NULL, FALSE, $encryptionAlgorithm);
+    $credential = new X509Credential($certificate, $key);
+
+    foreach ($message->getAllEncryptedAssertions() as $encryptedAssertion) {
+      $assertion = $encryptedAssertion->decryptMultiAssertion(
+        [$credential],
+        new DeserializationContext()
+      );
+
+      $message->addAssertion($assertion);
+    }
   }
 
 }

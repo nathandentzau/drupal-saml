@@ -4,17 +4,12 @@ namespace Drupal\saml\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 use LightSaml\Context\Profile\MessageContext;
-use Drupal\saml\Entity\IdentityProviderInterface;
+use Drupal\saml\Entity\SamlProviderInterface;
 
 /**
  * Provides an event for receiving SAML responses.
  */
 class ReceiveSamlMessageEvent extends Event {
-
-  /**
-   * Event machine name.
-   */
-  const NAME = 'saml.receive_response';
 
   /**
    * SAML message context.
@@ -24,26 +19,26 @@ class ReceiveSamlMessageEvent extends Event {
   protected $context;
 
   /**
-   * Identity provider entity.
+   * Service provider entity.
    *
-   * @var Drupal\saml\Entity\IdentityProviderInterface
+   * @var Drupal\saml\Entity\SamlProviderInterface
    */
-  protected $identityProvider;
+  protected $serviceProvider;
 
   /**
    * Constructor for SamlResponseEvent.
    *
    * @param LightSaml\Context\Profile\MessageContext $context
    *   SAML message context.
-   * @param Drupal\saml\Entity\IdentityProviderInterface $identityProvider
-   *   Identity provider entity.
+   * @param Drupal\saml\Entity\SamlProviderInterface $serviceProvider
+   *   Service provider entity.
    */
   public function __construct(
     MessageContext $context,
-    IdentityProviderInterface $identityProvider
+    SamlProviderInterface $serviceProvider
   ) {
     $this->context = $context;
-    $this->identityProvider = $identityProvider;
+    $this->serviceProvider = $serviceProvider;
   }
 
   /**
@@ -57,13 +52,13 @@ class ReceiveSamlMessageEvent extends Event {
   }
 
   /**
-   * Get the Identity Provider.
+   * Get the Service Provider.
    *
-   * @return Drupal\saml\Entity\IdentityProviderInterface
-   *   The current Identity Provider.
+   * @return Drupal\saml\Entity\SamlProviderInterface
+   *   The current Service Provider.
    */
-  public function getIdentityProvider() {
-    return $this->identityProvider;
+  public function getServiceProvider() {
+    return $this->serviceProvider;
   }
 
 }

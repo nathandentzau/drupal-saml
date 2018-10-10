@@ -10,34 +10,52 @@ saml.service_provider.*:
       label: Name
     encrypted_response:
       type: boolean
-      label: Wants encrypted response
-    encryption_algorithm:
+      label: Encrypted response
+    encryption_response_algorithm:
       type: string
       label: Encryption algorithm
-    encryption_certificate:
+    encryption_response_certificate:
       type: string
       label: Encryption certificate
+    encryption_response_key:
+      type: string
+      label: Encryption key
     signed_response:
       type: boolean
-      label: Wants signed response
-    signature_algorithm:
+      label: Signed response
+    signature_response_algorithm:
       type: string
-      label: Signature algorithm
-    signature_certificate:
+      label: Signature response algorithm
+    signature_response_certificate:
       type: string
-      label: Signature certificate
-    signature_key:
+      label: Signature response certificate
+    signature_response_key:
       type: string
-      label: Signature key
+      label: Signature response key
+    signed_request:
+      type: boolean
+      label: Signed request
+    signature_request_algorithm:
+      type: string
+      label: Signature request algorithm
+    signature_request_certificate:
+      type: string
+      label: Signature request certificate
+    signature_request_key:
+      type: string
+      label: Signature request key
     issuer_format:
       type: string
       label: Issuer format
+    issuer:
+      type: string
+      label: Issuer
     name_id_format:
       type: string
       label: Name ID format
-    audience_restriction:
+    email_attribute:
       type: string
-      label: Audience restriction
-    acs_url:
+      label: Email attribute
+    sso_url:
       type: string
-      label: Assertion consumer service URL
+      label: Sign Sign On URL

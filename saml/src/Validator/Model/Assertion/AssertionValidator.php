@@ -5,7 +5,7 @@ namespace Drupal\saml\Validator\Model\Assertion;
 use Drupal\Core\Url;
 use LightSaml\Model\Assertion\Assertion;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\saml\Entity\IdentityProviderInterface;
+use Drupal\saml\Entity\SamlProviderInterface;
 use LightSaml\Error\LightSamlValidationException;
 use Drupal\saml\Exception\SamlValidationException;
 use LightSaml\Model\Assertion\AudienceRestriction;
@@ -41,11 +41,11 @@ class AssertionValidator extends AssertionValidatorBase {
   protected $assertionTimeValidator;
 
   /**
-   * Identity provider.
+   * Service Provider.
    *
-   * @var Drupal\saml\Entity\IdentityProviderInterface
+   * @var Drupal\saml\Entity\SamlProviderInterface
    */
-  protected $identityProvider;
+  protected $provider;
 
   /**
    * Signature validator.
@@ -59,8 +59,8 @@ class AssertionValidator extends AssertionValidatorBase {
    *
    * @param Symfony\Component\HttpFoundation\Request $request
    *   Symfony request.
-   * @param Drupal\saml\Entity\IdentityProviderInterface $identityProvider
-   *   Identity provider.
+   * @param Drupal\saml\Entity\SamlProviderInterface $provider
+   *   Service Provider.
    * @param LightSaml\Validator\Model\NameId\NameIdValidatorInterface $nameIdValidator
    *   Name ID validator.
    * @param LightSaml\Validator\Model\Subject\SubjectValidatorInterface $subjectValidator
@@ -74,26 +74,26 @@ class AssertionValidator extends AssertionValidatorBase {
    */
   public function __construct(
     Request $request,
-    IdentityProviderInterface $identityProvider,
+    SamlProviderInterface $provider,
     NameIdValidatorInterface $nameIdValidator = NULL,
     SubjectValidatorInterface $subjectValidator = NULL,
     StatementValidatorInterface $statementValidator = NULL,
     AssertionTimeValidatorInterface $assertionTimeValidator = NULL,
     SignatureValidatorInterface $signatureValidator = NULL
   ) {
-    $this->identityProvider = $identityProvider;
+    $this->provider = $provider;
     $this->assertionTimeValidator = $assertionTimeValidator
       ?: new AssertionTimeValidator();
     $this->signatureValidator = $signatureValidator
-      ?: new SignatureValidator($identityProvider);
+      ?: new SignatureValidator($provider);
 
     parent::__construct(
-      $nameIdValidator ?: new CompositeIssuerValidator($identityProvider),
+      $nameIdValidator ?: new CompositeIssuerValidator($provider),
       $subjectValidator ?: new CompositeSubjectValidator(
-        new CompositeNameIdValidator($identityProvider),
+        new CompositeNameIdValidator($provider),
         $request
       ),
-      $statementValidator ?: new CompositeStatementValidator($identityProvider)
+      $statementValidator ?: new CompositeStatementValidator($provider)
     );
   }
 
@@ -117,8 +117,8 @@ class AssertionValidator extends AssertionValidatorBase {
       ? $item->getAllAudience()[0]
       : NULL;
     $expectedAudience = Url::fromRoute(
-      'saml.inbound',
-      ['identityProvider' => $this->identityProvider->id()],
+      'saml.service_provider',
+      ['serviceProvider' => $this->provider->id()],
       ['absolute' => TRUE]
     )->toString();
 

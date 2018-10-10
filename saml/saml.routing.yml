@@ -1,56 +1,38 @@
-saml.outbound:
-  path: /saml/outbound/{serviceProvider}
+saml.service_provider:
+  path: /saml/sp/{serviceProvider}
   requirements:
     _access: 'FALSE'
 
-saml.outbound.login:
-  path: /saml/outbound/{serviceProvider}/login
+saml.service_provider.consume:
+  path: /saml/sp/{serviceProvider}/consume
   defaults:
-    _controller: Drupal\saml\Controller\OutboundConnectionController::login
-  requirements:
-    _user_is_logged_in: 'TRUE'
-  options:
-    parameters:
-      serviceProvider:
-        type: 'entity:service_provider'
-
-saml.outbound.metadata:
-  path: /saml/sp/{outboundConnection}/metadata.xml
-  defaults:
-    _controller: Drupal\saml\Controller\OutboundConnectionController::metadata
-  methods: [ GET ]
-  requirements:
-    _access: 'TRUE'
-  options:
-    parameters:
-      outboundConnection:
-        type: 'entity:outbound_connection'
-
-saml.inbound:
-  path: /saml/inbound/{identityProvider}
-  requirements:
-    _access: 'FALSE'
-
-saml.inbound.consume:
-  path: /saml/inbound/{identityProvider}/consume
-  defaults:
-    _controller: Drupal\saml\Controller\InboundConnectionController::consume
+    _controller: Drupal\saml\Controller\ServiceProviderController::consume
   methods: [ POST ]
   requirements:
     _access: 'TRUE'
   options:
     parameters:
-      identityProvider:
-        type: 'entity:identity_provider'
+      serviceProvider:
+        type: 'entity:service_provider'
 
-saml.inbound.metadata:
-  path: /saml/inbound/{identityProvider}/metadata.xml
+saml.service_provider.login:
+  path: /saml/sp/{serviceProvider}/login
   defaults:
-    _controller: Drupal\saml\Controller\InboundConnectionController::metadata
-  methods: [ GET ]
+    _controller: Drupal\saml\Controller\ServiceProviderController::login
   requirements:
     _access: 'TRUE'
   options:
     parameters:
-      identityProvider:
-        type: 'entity:identity_provider'
+      serviceProvider:
+        type: 'entity:service_provider'
+
+saml.service_provider.metadata:
+  path: /saml/sp/{serviceProvider}/metadata.xml
+  defaults:
+    _controller: Drupal\saml\Controller\ServiceProviderController::metadata
+  requirements:
+    _access: 'TRUE'
+  options:
+    parameters:
+      serviceProvider:
+        type: 'entity:service_provider'

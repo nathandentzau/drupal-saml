@@ -5,12 +5,12 @@ namespace Drupal\saml\Event;
 use Drupal\user\UserInterface;
 use LightSaml\Model\Protocol\Response;
 use Symfony\Component\EventDispatcher\Event;
-use Drupal\saml\Entity\IdentityProviderInterface;
+use Drupal\saml\Entity\SamlProviderInterface;
 
 /**
  * Provides a user provision event.
  */
-class ProvisionSamlUserEvent extends Event {
+class ProvisionUserEvent extends Event {
 
   /**
    * Drupal user.
@@ -27,11 +27,11 @@ class ProvisionSamlUserEvent extends Event {
   protected $message;
 
   /**
-   * Identity Provider entity.
+   * Service Provider entity.
    *
-   * @var Drupal\saml\Entity\IdentityProviderInterface
+   * @var Drupal\saml\Entity\SamlProviderInterface
    */
-  protected $identityProvider;
+  protected $serviceProvider;
 
   /**
    * Constructor for ProvisionUserEvent.
@@ -40,17 +40,17 @@ class ProvisionSamlUserEvent extends Event {
    *   A Drupal user.
    * @param LightSaml\Model\Protocol\Response $message
    *   A SAML message.
-   * @param Drupal\saml\Entity\IdentityProviderInterface $identityProvider
-   *   An Identity Provider.
+   * @param Drupal\saml\Entity\SamlProviderInterface $serviceProvider
+   *   An Service Provider.
    */
   public function __construct(
     UserInterface $account,
     Response $message,
-    IdentityProviderInterface $identityProvider
+    SamlProviderInterface $serviceProvider
   ) {
     $this->account = $account;
     $this->message = $message;
-    $this->identityProvider = $identityProvider;
+    $this->serviceProvider = $serviceProvider;
   }
 
   /**
@@ -73,13 +73,13 @@ class ProvisionSamlUserEvent extends Event {
   }
 
   /**
-   * Get the Identity Provider entity.
+   * Get the Service Provider entity.
    *
-   * @return Drupal\saml\Entity\IdentityProviderInterface
-   *   An Identity Provider entity.
+   * @return Drupal\saml\Entity\SamlProviderInterface
+   *   An Service Provider entity.
    */
-  public function getIdentityProvider() {
-    return $this->identityProvider;
+  public function getServiceProvider() {
+    return $this->serviceProvider;
   }
 
 }

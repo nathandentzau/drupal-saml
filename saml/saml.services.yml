@@ -1,6 +1,6 @@
 services:
-  saml.inbound.metadata_factory:
-    class: Drupal\saml\Factory\Model\Metadata\InboundConnectionMetadataFactory
+  saml.service_provider.metadata_factory:
+    class: Drupal\saml\Factory\Model\Metadata\ServiceProviderMetadataFactory
     arguments:
       - '@event_dispatcher'
 
@@ -9,9 +9,27 @@ services:
     arguments:
       - '@event_dispatcher'
 
+  saml.authn_request_factory:
+    class: Drupal\saml\Factory\Model\Protocol\SamlAuthenticationRequestFactory
+    arguments:
+      - '@event_dispatcher'
+
   saml.relay_state_subscriber:
     class: Drupal\saml\EventSubscriber\RelayStateSubscriber
     arguments:
       - '@request_stack'
+    tags:
+      - { name: event_subscriber }
+
+  saml.field_mapper.manager:
+    class: Drupal\saml\Field\FieldMapperManager
+    tags:
+      - name: service_collector
+        tag: saml.field_mapper
+        call: addFieldMapper
+
+  saml.field_mapper.subscriber:
+    class: Drupal\saml\EventSubscriber\UserFieldMapperSubscriber
+    arguments: ['@saml.field_mapper.manager']
     tags:
       - { name: event_subscriber }

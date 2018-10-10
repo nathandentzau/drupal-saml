@@ -25,7 +25,7 @@ class CompositeIssuerValidator extends AbstractCompositeNameIdValidator {
 
     $issuerFormat = $nameId->getFormat();
     $expectedIssuerFormat = $this
-      ->getIdentityProvider()
+      ->getServiceProvider()
       ->getIssuerFormat();
 
     if ($issuerFormat !== $expectedIssuerFormat) {
@@ -36,7 +36,7 @@ class CompositeIssuerValidator extends AbstractCompositeNameIdValidator {
 
     $issuer = $nameId->getValue();
     $expectedIssuer = $this
-      ->getIdentityProvider()
+      ->getServiceProvider()
       ->getIssuer();
 
     if ($issuer !== $expectedIssuer) {

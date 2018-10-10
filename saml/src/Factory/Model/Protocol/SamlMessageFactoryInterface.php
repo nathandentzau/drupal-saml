@@ -5,34 +5,26 @@ namespace Drupal\saml\Factory\Model\Protocol;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\saml\Entity\ServiceProviderInterface;
-use Drupal\saml\Entity\IdentityProviderInterface;
+use Drupal\saml\Entity\SamlProviderInterface;
 
+/**
+ * Provides a saml message factory interface.
+ */
 interface SamlMessageFactoryInterface {
 
   /**
    * Create a SAML message.
    *
-   * @param Drupal\saml\Entity\ServiceProviderInterface $serviceProvider
-   *   The Service Provider entity.
-   * @param Drupal\Core\Session\AccountInterface $account
-   *   The current user account.
-   * @param \DateTime $currentTime
-   *   Optional. The current time.
-   *
-   * @return LightSaml\Model\Protocol\SamlMessage|null
-   *   The SAML message.
+   * @param Drupal\saml\Entity\ServiceProviderInterface $provider
+   * @return void
    */
-  public function create(
-    ServiceProviderInterface $serviceProvider,
-    AccountInterface $account,
-    \DateTime $currentTime = NULL
-  );
+  public function create(SamlProviderInterface $provider);
 
   /**
    * Create a SAML message from the HTTP request.
    *
-   * @param Drupal\saml\Entity\IdentityProviderInterface $identityProvider
-   *   The Identity Provider entity.
+   * @param Drupal\saml\Entity\SamlProviderInterface $provider
+   *   The SAML provider entity.
    * @param Symfony\Component\HttpFoundation\Request $request
    *   The symfony http request.
    *
@@ -40,7 +32,7 @@ interface SamlMessageFactoryInterface {
    *   The SAML message.
    */
   public function createFromRequest(
-    IdentityProviderInterface $identityProvider,
+    SamlProviderInterface $provider,
     Request $request
   );
 

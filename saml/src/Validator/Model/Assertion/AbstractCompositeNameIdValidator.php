@@ -2,7 +2,7 @@
 
 namespace Drupal\saml\Validator\Model\Assertion;
 
-use Drupal\saml\Entity\IdentityProviderInterface;
+use Drupal\saml\Entity\SamlProviderInterface;
 use LightSaml\Validator\Model\NameId\NameIdValidator;
 use LightSaml\Validator\Model\NameId\NameIdValidatorInterface;
 
@@ -12,11 +12,11 @@ use LightSaml\Validator\Model\NameId\NameIdValidatorInterface;
 abstract class AbstractCompositeNameIdValidator implements NameIdValidatorInterface {
 
   /**
-   * Identity provider.
+   * Service Provider.
    *
-   * @var Drupal\saml\Entity\IdentityProviderInterface
+   * @var Drupal\saml\Entity\SamlProviderInterface
    */
-  protected $identityProvider;
+  protected $provider;
 
   /**
    * Name ID validator.
@@ -28,26 +28,26 @@ abstract class AbstractCompositeNameIdValidator implements NameIdValidatorInterf
   /**
    * Constructor for AbstractCompositeNameIdValidator.
    *
-   * @param Drupal\saml\Entity\IdentityProviderInterface $identityProvider
-   *   Identity provider.
+   * @param Drupal\saml\Entity\SamlProviderInterface $provider
+   *   Service Provider.
    * @param LightSaml\Validator\Model\NameId\NameIdValidatorInterface $validator
    *   Name ID validator.
    */
   public function __construct(
-    IdentityProviderInterface $identityProvider,
+    SamlProviderInterface $provider,
     NameIdValidatorInterface $validator = NULL
   ) {
-    $this->identityProvider = $identityProvider;
+    $this->provider = $provider;
     $this->validator = $validator ?: new NameIdValidator();
   }
 
   /**
-   * Get the identity provider.
+   * Get the Service Provider.
    *
-   * @return Drupal\saml\Entity\IdentityProviderInterface
+   * @return Drupal\saml\Entity\SamlProviderInterface
    */
-  public function getIdentityProvider() {
-    return $this->identityProvider;
+  public function getServiceProvider() {
+    return $this->provider;
   }
 
   /**
