@@ -172,7 +172,13 @@ abstract class SamlProviderBase extends ConfigEntityBase implements SamlProvider
    * {@inheritdoc}
    */
   public function getEncryptionResponseKey() {
-    return $this->get('encryption_response_key');
+    $key = $this->get('encryption_response_key');
+
+    if (file_exists(DRUPAL_ROOT . '/' . $key)) {
+      return file_get_contents(DRUPAL_ROOT . '/' . $key);
+    }
+
+    return $key;
   }
 
   /**
@@ -231,7 +237,13 @@ abstract class SamlProviderBase extends ConfigEntityBase implements SamlProvider
    * {@inheritdoc}
    */
   public function getSignatureResponseKey() {
-    return $this->get('signature_response_key');
+    $key = $this->get('signature_response_key');
+
+    if (file_exists(DRUPAL_ROOT . '/' . $key)) {
+      return file_get_contents(DRUPAL_ROOT . '/' . $key);
+    }
+
+    return $key;
   }
 
   /**
