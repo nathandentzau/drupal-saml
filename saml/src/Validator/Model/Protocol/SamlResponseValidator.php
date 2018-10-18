@@ -234,7 +234,7 @@ class SamlResponseValidator implements SamlMessageValidatorInterface {
       ->getEncryptedResponse();
 
     if ($wantsEncryptedResponse && !$message->getAllEncryptedAssertions()) {
-      throw new SamlValidationResponse(
+      throw new SamlValidationException(
         'Expected assertions to be encrypted but none found'
       );
     }
