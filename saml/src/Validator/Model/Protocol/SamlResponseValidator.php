@@ -214,8 +214,11 @@ class SamlResponseValidator implements SamlMessageValidatorInterface {
 
     if ($destination !== $expectedDestination) {
       throw new SamlValidationException(
-        'Destination % does not match expected value',
-        $destination
+        sprintf(
+          'Destination %s does not match %s',
+          $destination,
+          $expectedDestination
+        )
       );
     }
   }
