@@ -85,7 +85,7 @@ class SamlAuthenticationRequestFactory implements SamlMessageFactoryInterface {
     }
 
     $event = new SamlMessageAlterEvent($authnRequest, $provider);
-    $this->eventDispatcher->dispatch(SamlMessageAlterEvent::class, $event);
+    $this->eventDispatcher->dispatch($event);
 
     return $event->getMessage();
   }

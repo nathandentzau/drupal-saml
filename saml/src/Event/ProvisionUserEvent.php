@@ -4,7 +4,7 @@ namespace Drupal\saml\Event;
 
 use Drupal\user\UserInterface;
 use LightSaml\Model\Protocol\Response;
-use Symfony\Component\EventDispatcher\Event;
+use Drupal\Component\EventDispatcher\Event;
 use Drupal\saml\Entity\SamlProviderInterface;
 
 /**

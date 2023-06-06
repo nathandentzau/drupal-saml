@@ -2,7 +2,6 @@
 
 namespace Drupal\saml\Field;
 
-use Drupal\saml\Field\FieldMapperInterface;
 use Drupal\saml\Entity\SamlProviderInterface;
 
 /**

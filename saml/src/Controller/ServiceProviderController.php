@@ -169,7 +169,6 @@ class ServiceProviderController extends ControllerBase {
     $this
       ->eventDispatcher
       ->dispatch(
-        ProvisionUserEvent::class,
         new ProvisionUserEvent($account, $message, $serviceProvider)
       );
 
@@ -181,7 +180,7 @@ class ServiceProviderController extends ControllerBase {
     );
     $this
       ->eventDispatcher
-      ->dispatch(RedirectLocationAlterEvent::class, $event);
+      ->dispatch($event);
 
     return new RedirectResponse($event->getLocation()->toString());
   }

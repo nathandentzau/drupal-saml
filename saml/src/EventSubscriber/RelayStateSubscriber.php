@@ -38,7 +38,7 @@ class RelayStateSubscriber implements EventSubscriberInterface {
    */
   public function onAlterLocation(RedirectLocationAlterEvent $event) {
     $location = $this->requestStack
-      ->getMasterRequest()
+      ->getMainRequest()
       ->request
       ->get('RelayState');
 

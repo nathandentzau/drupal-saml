@@ -2,7 +2,6 @@
 
 namespace Drupal\saml\Factory\Model\Protocol;
 
-use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\saml\Entity\ServiceProviderInterface;
 use Drupal\saml\Entity\SamlProviderInterface;

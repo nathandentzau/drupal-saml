@@ -10,16 +10,10 @@ use LightSaml\Error\LightSamlValidationException;
 use Drupal\saml\Exception\SamlValidationException;
 use LightSaml\Model\Assertion\AudienceRestriction;
 use LightSaml\Model\XmlDSig\AbstractSignatureReader;
-use Drupal\saml\Validator\Model\Assertion\SignatureValidator;
 use LightSaml\Validator\Model\NameId\NameIdValidatorInterface;
 use LightSaml\Validator\Model\Assertion\AssertionTimeValidator;
 use LightSaml\Validator\Model\Subject\SubjectValidatorInterface;
-use Drupal\saml\Validator\Model\Assertion\CompositeIssuerValidator;
-use Drupal\saml\Validator\Model\Assertion\CompositeNameIdValidator;
-use Drupal\saml\Validator\Model\Assertion\CompositeSubjectValidator;
 use LightSaml\Validator\Model\Statement\StatementValidatorInterface;
-use Drupal\saml\Validator\Model\Assertion\CompositeStatementValidator;
-use Drupal\saml\Validator\Model\Assertion\SignatureValidatorInterface;
 use LightSaml\Validator\Model\Assertion\AssertionTimeValidatorInterface;
 use LightSaml\Validator\Model\Assertion\AssertionValidator as AssertionValidatorBase;
 

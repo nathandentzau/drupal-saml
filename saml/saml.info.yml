@@ -1,7 +1,7 @@
 name: SAML
-description: SAML 2.0 authentication layer for Drupal 8.
+description: SAML 2.0 authentication layer for Drupal.
 type: module
-core_version_requirement: ^8.9 || ^9
+core_version_requirement: ^9.3 || ^10
 package: Web services
 
 dependencies:

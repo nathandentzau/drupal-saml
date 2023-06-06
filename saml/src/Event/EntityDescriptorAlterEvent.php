@@ -2,7 +2,7 @@
 
 namespace Drupal\saml\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Drupal\Component\EventDispatcher\Event;
 use Drupal\saml\Entity\SamlProviderInterface;
 use LightSaml\Model\Metadata\EntityDescriptor;
 

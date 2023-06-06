@@ -15,7 +15,6 @@ use Drupal\saml\Event\ReceiveSamlMessageEvent;
 use LightSaml\Model\Context\DeserializationContext;
 use Drupal\saml\Validator\Model\Protocol\SamlResponseValidator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Drupal\saml\Factory\Model\Protocol\SamlMessageFactoryInterface;
 
 /**
  * Provides a saml response factory.
@@ -91,7 +90,6 @@ class SamlResponseFactory implements SamlMessageFactoryInterface {
     }
 
     $this->eventDispatcher->dispatch(
-      ReceiveSamlMessageEvent::class,
       new ReceiveSamlMessageEvent($context, $serviceProvider)
     );
 

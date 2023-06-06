@@ -3,7 +3,6 @@
 namespace Drupal\saml\Field;
 
 use LightSaml\Model\Assertion\Attribute;
-use Drupal\saml\Exception\SamlValidationException;
 
 /**
  * Provides a trait for optional attribute values.
